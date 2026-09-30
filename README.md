@@ -17,9 +17,8 @@ were tested with OpenCRAVAT **2.17.0** and its `hg38` mapper **1.47.2**, which
 uses GENCODE 47. Select the GENCODE release appropriate to your installed mapper;
 the builder does not detect it automatically. Check the mapper metadata with
 `oc module info hg38` and its release notes. These are pinned, reproducible
-inputs; they are not live NCBI
-lookups. The GENCODE release number is the cross-reference source, not a RefSeq
-annotation release number.
+inputs; they are not live NCBI lookups. The GENCODE release number is the
+cross-reference source, not a RefSeq annotation release number.
 
 Each accession pair is labeled as one of:
 
@@ -32,9 +31,8 @@ Each accession pair is labeled as one of:
 
 The annotator keeps all associated RNA accessions in the detailed output,
 preserving versions. It never chooses one arbitrary RefSeq identifier from an
-ambiguous association. For an
-identical pair present in both sources, MANE takes precedence. Other RefSeq
-associations remain visible with their own source labels. MANE pairs are included
+ambiguous association. For an identical pair present in both sources, MANE
+takes precedence. Other RefSeq associations remain visible with their own source labels. MANE pairs are included
 even when their ENST version is absent from the older GENCODE metadata, but can
 only match the exact ENST version supplied by the mapper.
 
@@ -56,9 +54,8 @@ HGVS validation.
   symlinks; Windows support has not been verified.
 
 Run every command below from this project's root, the directory containing
-`build_annotator.py`. In the original parent repository, first run
-`cd refseq_annotator`; in a detached clone, use the clone root. Activate the
-OpenCRAVAT environment before commands using `oc` or `python smoke_test.py`.
+`build_annotator.py`. Activate the OpenCRAVAT environment before commands using
+`oc` or `python smoke_test.py`.
 
 ## Build
 
@@ -112,9 +109,8 @@ python3 build_annotator.py --release 47 --mane-release 1.5 \
 Use `--without-mane` instead of `--mane ...` to omit MANE; this leaves
 `primary_refseq` empty while retaining ordinary cross-references in the other
 outputs. The declared release labels for local files are your responsibility:
-the TSV headers do not contain
-release identifiers. Source hashes are still recorded. Only versioned RNA
-accessions (`NM_`, `NR_`, `XM_`, `XR_`) are retained; protein accessions are not
+the TSV headers do not contain release identifiers. Source hashes are still
+recorded. Only versioned RNA accessions (`NM_`, `NR_`, `XM_`, `XR_`) are retained; protein accessions are not
 transcript identifiers.
 
 ## Install and run
@@ -252,30 +248,30 @@ BRAF `7:140453136 A>T` to hg38 `chr7:140753336 A>T` and associated the selected
 `ENST00000646891.2` with `NM_004333.6`. This is a limited integration check, not
 validation of variant consequences or coverage across a clinical panel.
 
-## Exporting to a separate repository
+## Source distribution
 
-Copy the source files only. Existing local directories such as `.cache/`,
-`build/`, `build_old_v1.0.0/`, `test-output/`, and `__pycache__/` contain generated
-or machine-specific material. Some old build copies were tracked in the parent
-repository; `.gitignore` does not remove already tracked files. A source-only
-archive avoids carrying them or the parent's Git history into a public repository:
+Generated databases, downloaded references, old builds, and test outputs are
+excluded by `.gitignore`. They are not needed in a source distribution; users
+create the database with `build_annotator.py`.
+
+To export the committed source without local artifacts, first commit the changes
+you intend to distribute, then run:
 
 ```bash
-tar --exclude='__pycache__' --exclude='*.pyc' -czf /tmp/refseq-annotator-source.tar.gz \
-  README.md .gitignore annotation.py build_annotator.py smoke_test.py templates tests
+git archive --format=tar.gz --output=/tmp/refseq-annotator-source.tar.gz HEAD
 ```
 
-Extract this archive into a new repository and run the unit tests there before
-publishing. No built database is included; users generate it with the builder.
-When a standalone license is added, include its file in the export as well.
+This exports the latest commit, not uncommitted working-tree changes. Avoid
+uploading a zip of the whole working directory: local caches and build manifests
+can contain machine-specific paths.
 
-### License decision before publication
+## License
 
-This directory currently has **no standalone software license**. The original
-parent repository contains a proprietary license. The maintainer needs to choose
-and add the appropriate license for this separate project; this review does not
-assign one. Reference data from GENCODE and NCBI have their own terms and citation
-requirements, separate from any license chosen for the code.
+The source code is licensed under the [MIT License](LICENSE).
+Copyright (c) 2026 Andre Oszwald.
+
+Reference data from GENCODE and NCBI have their own terms and citation
+requirements, separate from the code license.
 
 ## What an actual RefSeq mapper would require
 
