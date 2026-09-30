@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.cache/
+build/
+build_*/
+test-output/
+.venv/
+*.sqlite
+*.sqlite3
+*.db
+*.part

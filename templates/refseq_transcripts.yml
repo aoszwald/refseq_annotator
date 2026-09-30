@@ -1,0 +1,36 @@
+title: NCBI RefSeq transcript cross-references
+version: '1.1.0+gencode@RELEASE@.mane@MANE@'
+type: annotator
+level: variant
+input_format: crx
+input_columns: [uid, chrom, pos, ref_base, alt_base, hugo, transcript, all_mappings]
+description: Versioned NCBI RefSeq RNA accessions for the mapper's existing Ensembl transcripts, with exact MANE pairs and association-only cross-references distinguished.
+datasource: 'GENCODE @RELEASE@ RefSeq metadata; MANE @MANE@'
+output_columns:
+  - name: primary_refseq
+    title: Primary transcript MANE RefSeq accession
+    type: string
+  - name: primary_status
+    title: Primary transcript mapping status
+    type: string
+  - name: primary_enst
+    title: Original primary Ensembl transcript
+    type: string
+  - name: all_refseq
+    title: All mapped RefSeq accessions
+    type: string
+  - name: matched_count
+    title: Transcripts with RefSeq matches
+    type: int
+  - name: unmatched_count
+    title: Transcripts without RefSeq matches
+    type: int
+  - name: all_transcripts
+    title: Transcript cross-references (JSON)
+    type: string
+  - name: gencode_release
+    title: GENCODE cross-reference release
+    type: string
+  - name: mane_release
+    title: MANE release
+    type: string
